@@ -1,0 +1,14 @@
+1-DAW-Bases-de-datos
+
+Boletin 4.3 SQL LMD
+
+1. Añadir una nueva oficina para la ciudad de Madrid, con el número de oficina 30, con un objetivo
+de 10.000 euros y región ‘Centro’. Suponer que conocemos el orden de los campos en la tabla.
+
+	INSERT INTO oficinas
+	VALUES (30, 'centro', 'Madrid, null, 100000,0);
+
+En este caso como no especificamos una lista de columnas tenemos que poner los valores en el
+mismo orden que las columnas en vista diseño de la tabla.
+
+2. 
