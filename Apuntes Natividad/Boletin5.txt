@@ -1,0 +1,979 @@
+1. Crear la base de datos Instituto.
+
+	Create database if not exists Instituto;    
+	-----------------------------------------------------------------------
+	| Use instituto;
+   ---------------------> Para usar una base de datos  |
+	| Use empresa;                                                         |
+	-----------------------------------------------------------------------
+
+2. Eliminar la base de datos Empresa.
+
+	Drop database if exists empresa;
+
+3. Eliminar la base de datos Instituto.
+
+	Drop database if exists instituto;
+
+4. Crear la base de datos Empresa.
+	
+	Create schema if not exists empresa;
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Para la base de datos Empresa:
+5. Crear las tablas solo con el nombre y tipo de campos.
+
+	CREATE TABLE Clientes (
+  numclie INT(10),
+  
+				 nombre VARCHAR(30),
+  
+				 resp INT(10),
+  
+				 limitecredito INT(10)
+);
+
+	
+
+CREATE TABLE Empleados (
+  numemp INT(10),
+  
+				  nombre VARCHAR(30),
+  
+				  edad INT(10),
+  
+				  oficina INT(10),
+  
+				  puesto VARCHAR(20),
+  
+				  contrato DATE,
+  
+				  jefe INT(10),
+				  cuota INT(10),
+				  ventas INT(10));
+
+
+	
+CREATE TABLE Oficinas (
+  oficina INT(10),
+  
+				 ciudad VARCHAR(30),
+  
+				 region VARCHAR(20),
+  
+				 dir INT(10),
+  
+				 objetivo DECIMAL(19, 4),
+  
+				 ventas DECIMAL(19, 4)
+)
+;
+
+	
+
+CREATE TABLE Pedidos (
+  numpedido INT(10),
+  
+				fechapedido DATETIME,
+  
+				clie INT(10),
+  
+				resp INT(10),
+  
+				fab VARCHAR(10),
+  
+				producto VARCHAR(20),
+  
+				cant INT(10),
+  
+				importe DECIMAL(19, 4)
+)
+;
+
+	
+
+CREATE TABLE Productos (
+  idfab VARCHAR(10),
+  
+				  idproducto VARCHAR(20),
+  
+				  descripcion VARCHAR(30),
+  
+				  precio DECIMAL(19, 4),
+  
+				  existencias INT(10))
+
+6. Eliminar la tabla Empleados y volver a crearla, teniendo en cuenta que cada empleado debe tener obligatoriamente un nombre y una cuota.
+	
+	DROP TABLE EMPLEADOS;
+
+	
+
+CREATE TABLE Empleados (
+  numemp INT(10) NULL,
+  
+				  nombre VARCHAR(30) NOT NULL,
+  
+				  edad INT(10) NULL,
+  
+				  oficina INT(10) NULL,
+  
+				  puesto VARCHAR(20) NULL,
+  
+				  contrato DATE NULL,
+  
+				  jefe INT(10)NULL,
+				  cuota INT(10) NOT NULL,
+				  ventas INT(10) NULL);
+
+
+
+7. Volver a crear la tabla Empleados sabiendo que la edad por defecto es de 18 años, que en caso de no especificar ninguna oficina, los empleados se asignan a la oficina 21. Y que la cuota por defecto es de 1000 euros.
+
+	CREATE TABLE Empleados (
+  numemp INT(10) NOT NULL,
+  
+				  nombre VARCHAR(30) not NULL,
+  
+				  edad INT(10) default 18,
+  
+				  oficina INT(10) default 21,
+  
+				  puesto VARCHAR(20),
+  
+				  contrato DATE,
+  
+				  jefe INT(10),
+  
+				  cuota INT(10) default 1000,
+  
+				  ventas INT(10),
+  
+				  PRIMARY KEY (numemp)
+
+				);
+
+	insert into empleados (numemp,nombre) 
+
+	value(2280,'Maria Herrojo');
+	
+select * from empleados;
+
+8. Eliminar la tabla Empleados añadiendo su clave.
+
+
+
+9. Crear la tabla Oficinas con la su clave y tener en cuenta las características de cada campo: si permite, o no, valores nulos; si es aconsejable ponerle un valor por defecto; etc.
+
+	
+
+10. Para evitar tener que asignar un número a cada oficina, se pide crear la tabla de forma que el campo oficina sea asignado por el gestor de base de datos.
+
+	CREATE TABLE IF NOT EXISTS Oficinas (
+	oficina INT(10) NOT NULL auto_increment,
+    
+						ciudad varchar(30) NOT NULL,
+   
+						region varchar(30) NOT NULL,
+    
+						dir Int(10),
+    
+						objetivo DECIMAL(6,2),
+    
+						ventas DECIMAL(6,2),
+    
+						primary key(oficina)
+					   
+);
+
+	insert into oficinas (ciudad,region)  
+	value('Sevilla','Norte');
+
+	
+insert into oficinas (oficina, ciudad,region)  
+	value(99,'Sevilla','Norte');
+	
+	
+select * from oficinas;
+
+11. Crear la tabla Clientes con una clave automática y con las características, que se estimen oportunas, de cada uno de sus campos.
+
+	CREATE TABLE IF NOT EXISTS Clientes(
+	numclie INT(10) NOT NULL auto_increment,
+    
+						nombre VARCHAR(30) NOT NULL,
+    
+						resp INT(10) NOT NULL,
+    
+						limitecredito DECIMAL(6,2),
+    
+						primary key(numclie)
+					   
+);
+	
+	insert into clientes (nombre,resp)  
+	value('Maria', 22);
+
+	
+insert into clientes (numclie,nombre,resp)  
+	value(99,'Maria 2',22);
+
+	
+	select * from clientes;
+
+12. Crear la tabla Empleados suponiendo que no pueden existir dos empleados con el mismo nombre.
+
+	CREATE TABLE Empleados (
+  numemp INT(10) NOT NULL auto_increment,
+  
+				  nombre VARCHAR(30) not NULL UNIQUE,
+  
+				  edad INT(10) default 18,
+  
+				  oficina INT(10) default 21,
+  
+			          puesto VARCHAR(20),
+  
+				  contrato DATE,
+  
+				  jefe INT(10),
+  
+				  cuota INT(10) default 1000,
+  
+			          ventas INT(10),
+  
+				  PRIMARY KEY (numemp)
+);
+
+	insert into empleados (nombre)  
+	value('Maria');
+
+	insert into empleados (nombre)  
+	value('Maria 3');
+	
+select * from empleados;
+
+
+13. Crear la tabla Oficinas suponiendo que no pueden existir dos oficinas en la misma ciudad.
+
+	CREATE TABLE IF NOT EXISTS Oficinas (
+	oficina INT(10) NOT NULL auto_increment,
+    
+						ciudad varchar(30) NOT NULL,
+    
+						region varchar(30) NOT NULL,
+    
+						dir Int(10),
+    
+						objetivo DECIMAL(6,2),
+    
+						ventas DECIMAL(6,2),
+    
+						CONSTRAINT primary key(oficina)
+);
+
+
+14. Crear la tabla Oficinas con sus claves foráneas.
+
+	CREATE TABLE IF NOT EXISTS Oficinas (
+	oficina INT(10) NOT NULL auto_increment,
+    
+						ciudad varchar(30) NOT NULL,
+    
+						region varchar(30) NOT NULL,
+    
+						dir Int(10),
+    
+						objetivo DECIMAL(6,2),
+    
+						ventas DECIMAL(6,2),
+    
+						CONSTRAINT primary key(oficina),
+						CONSTRAINT FOREIGN KEY (dir) references empleados(numemp)
+);
+
+15. Escribir la tabla Clientes con sus claves foráneas.
+
+	CREATE TABLE IF NOT EXISTS Clientes(
+	numclie INT(10) NOT NULL auto_increment,
+    
+						nombre VARCHAR(30) NOT NULL,
+    
+						resp INT(10) NOT NULL,
+    
+						limitecredito DECIMAL(6,2),
+	
+						CONSTRAINT primary key(numclie),
+	
+						CONSTRAINT FOREIGN KEY (resp) references Empleados(numemp)
+);
+
+
+16. Crear las tablas Empleados y Oficinas utilizando los CONSTRAINT para las claves primarias, foráneas y valores únicos.
+
+	CREATE TABLE IF NOT EXISTS Oficinas (
+	oficina INT(10) NOT NULL auto_increment,
+    
+						ciudad varchar(30) NOT NULL,
+    
+						region varchar(30) NOT NULL,
+    
+						dir Int(10),
+    
+						objetivo DECIMAL(6,2),
+    
+						ventas DECIMAL(6,2),
+    
+						CONSTRAINT primary key(oficina)
+);
+
+	
+
+CREATE TABLE IF NOT EXISTS Empleados (
+  numemp INT(10) NOT NULL auto_increment,
+  
+				 		nombre VARCHAR(30) not NULL,
+  
+				  		edad INT(10) default 18,
+  
+				  		oficina INT(10) default 21 ,
+  
+				  		puesto VARCHAR(20),
+  
+				  		contrato DATE,
+  
+				  		jefe INT(10) REFERENCES Empleados(numemp),
+  
+				  		cuota INT(10) default 1000,
+  
+				  		ventas INT(10),
+  
+				  		CONSTRAINT PRIMARY KEY (numemp),
+  
+				  		CONSTRAINT UNIQUE (nombre,edad),
+  
+				  		CONSTRAINT FOREIGN KEY (Oficina) references Oficinas(oficina)
+);
+
+
+
+17. Crear la tabla Productos.
+
+	CREATE TABLE IF NOT EXISTS Productos(
+	idfab VARCHAR(30) NOT NULL,
+    
+						idproducto VARCHAR(30) NOT NULL,
+    
+						descripcion VARCHAR(30),
+	
+						precio DECIMAL(6,2),
+    
+						existencias int(100),
+    
+						CONSTRAINT PK primary key(idfab,idproducto)
+);
+
+18. Crear la tabla Pedidos con su clave principal y foráneas. Tener en cuenta que el número de pedido debe ser único.
+
+	CREATE TABLE IF NOT EXISTS Pedidos(
+	numpedido INT(10) NOT NULL,
+    
+						fechapedido date NOT NULL,
+    
+						clie INT(10) NOT NULL ,
+    
+						resp INT(10) NOT NULL,
+    
+						fab Varchar(3) NOT NULL,
+    
+						producto varchar(30) NOT NULL,
+    
+						cant INT(100),
+    
+						importe DECIMAL(19,4),
+    
+						CONSTRAINT primary key(numpedido),
+	
+						CONSTRAINT FOREIGN KEY (clie) references clientes(numclie),
+	
+						constraint foreign key (resp) references empleados(numemp),
+    
+						constraint foreign key (fab,producto) references productos(idfab,idproducto)
+);
+
+19. Escribir un script que cree todas las tablas de la base de datos.
+
+	DROP DATABASE IF EXISTS Empresa;
+	
+CREATE DATABASE Empresa;
+
+	USE Empresa;
+
+
+
+	CREATE TABLE IF NOT EXISTS Oficinas (
+	oficina INT(10) NOT NULL auto_increment,
+    
+						ciudad varchar(30) NOT NULL,
+    
+						region varchar(30) NOT NULL,
+    
+						dir Int(10),
+    
+						objetivo DECIMAL(6,2),
+    
+						ventas DECIMAL(6,2),
+    
+						CONSTRAINT primary key(oficina)
+);
+
+	
+
+CREATE TABLE IF NOT EXISTS Empleados (
+  numemp INT(10) NOT NULL auto_increment,
+  
+				 		nombre VARCHAR(30) not NULL,
+  
+				  		edad INT(10) default 18,
+  
+				  		oficina INT(10) default 21 ,
+  
+				  		puesto VARCHAR(20),
+  
+				  		contrato DATE,
+  
+				  		jefe INT(10) REFERENCES Empleados(numemp),
+  
+				  		cuota INT(10) default 1000,
+  
+				  		ventas INT(10),
+  
+				  		CONSTRAINT PRIMARY KEY (numemp),
+  
+				  		CONSTRAINT UNIQUE (nombre,edad),
+  
+				  		CONSTRAINT FOREIGN KEY (Oficina) references Oficinas(oficina)
+);
+
+
+
+	CREATE TABLE IF NOT EXISTS Clientes(
+	numclie INT(10) NOT NULL auto_increment,
+    
+						nombre VARCHAR(30) NOT NULL,
+    
+						resp INT(10) NOT NULL,
+    
+						limitecredito DECIMAL(6,2),
+	
+						CONSTRAINT primary key(numclie),
+	
+						CONSTRAINT FOREIGN KEY (resp) references Empleados(numemp)
+);
+
+	
+
+CREATE TABLE IF NOT EXISTS Productos(
+	idfab VARCHAR(30) NOT NULL,
+    
+						idproducto VARCHAR(30) NOT NULL,
+    
+						descripcion VARCHAR(30),
+	
+						precio DECIMAL(6,2),
+    
+						existencias int(100),
+    
+						CONSTRAINT PK primary key(idfab,idproducto)
+);
+	
+	
+
+CREATE TABLE IF NOT EXISTS Pedidos(
+	numpedido INT(10) NOT NULL,
+    
+						fechapedido date NOT NULL,
+    
+						clie INT(10) NOT NULL ,
+    
+						resp INT(10) NOT NULL,
+    	
+						fab Varchar(3) NOT NULL,
+    	
+						producto varchar(30) NOT NULL,
+    
+						cant INT(100),
+    
+						importe DECIMAL(6,2),
+    
+						CONSTRAINT primary key(numpedido),
+	
+						CONSTRAINT FOREIGN KEY (clie) references clientes(numclie),
+	
+						constraint foreign key (resp) references empleados(numemp),
+    
+						constraint foreign key (fab,producto) references productos(idfab,idproducto)
+);
+
+
+20. Utilizar los script que insertan todos los datos de la empresa.
+
+	-- Disable foreign key checks
+
+	SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+
+	USE Empresa;
+	
+
+INSERT INTO Clientes(numclie, nombre, resp, limitecredito)
+		
+VALUES (2101,'Luis Garcia Antón', 106, 6500),
+  
+		       (2102,'Alvaro Rodríguez', 101, 6500),
+  
+		       (2103,'Jaime Jamás', 105, 5000),
+  
+		       (2105,'Antonio Ardilla', 101, 4500),
+  
+		       (2106,'Pepita Piña', 102, 6500),
+  
+		       (2107,'Julian López', 110, 3500),
+  
+		       (2108,'Marina Melón', 109, 5500),
+  
+		       (2109,'Alberto Andorra', 103, 2500),
+  
+		       (2111,'Cristóbal Colón', 103, 5000),
+  
+		       (2112,'María Silva', 108, 5000),
+  
+		       (2113,'Luisa Marrón', 104, 2000),
+  
+		       (2114,'Cristina Pérez', 102, 2000),
+  
+		       (2115,'Vicente Martínez', 101, 2000),
+  
+		       (2117,'Carlos Tena', 106, 35000),
+  
+		       (2118,'Junípero Álvarez', 108, 6000),
+ 
+		       (2119,'Salomón Bueno', 109, 2500),
+  
+		       (2120,'Juan Malo', 102, 50000),
+  
+		       (2121,'Vicente Ríos', 103, 4500),
+  
+		       (2122,'José Marchante', 105, 3000),
+  
+		       (2123,'Leandro Libros', 102, 4000),
+  
+		       (2124,'Juan Bolto', 107, 4000);
+
+
+	
+	INSERT INTO Empleados(numemp, nombre, edad, oficina, puesto, contrato, jefe, cuota, ventas)
+		
+VALUES (101,'Antonio Viguer', 45, 12,'Representante','2006-10-20', 104, 3000, 3050),
+  
+		       (104,'José González', 33, 12,'Dir ventas','2007-05-19', 106, 20000, 14300),
+  
+		       (103,'Francisco Frio', 29, 12,'Representante','2007-03-01', 104, 27500, 28600),
+  
+		       (102,'Alvaro Aluminio', 48, 21,'Representante','2015-12-10', 108, 350000, 474000),
+  
+		       (105,'Vicente Vino', 37, 13,'Representante','2008-02-12', 104, 3500, 3680),
+  
+		       (106,'Luis León', 52, 11,'Dir general','2008-06-14', NULL, 27500, 29900),
+  
+		       (107,'Jorge Gutiérrez', 49, 22,'Representante','2011-11-14', 108, 30000, 18600),
+  
+		       (108,'Ana Bustamante', 62, 21,'Dir ventas','2009-10-12', 106, 35000, 35100),
+  
+		       (109,'María Melocotón', 31, 11,'Representante','2009-10-12', 105, 30000, 39200),
+  
+		       (110,'Veronica Vic', 41, NULL,'Representante','2000-01-13', 104, NULL, 76000);
+
+
+
+	INSERT INTO Oficinas(oficina, ciudad, region, dir, objetivo, ventas)
+		
+VALUES (11,'Sevilla','sur', 106, 57500.0000, 69300.0000),
+  
+		       (12,'Cádiz','oeste', 104, 80000.0000, 73500.0000),
+  
+		       (13,'Castellón','este', 105, 35000.0000, 36800.0000),
+  
+		       (21,'Badajoz','oeste', 108, 72500.0000, 83600.0000),
+  
+		       (22,'La Coruña','norte', 108, 30000.0000, 18600.0000),
+  
+		       (23,'Sevilla','sur', 108, NULL, NULL),
+  
+		       (24,'Sevilla','sur', 108, 25000.0000, 15000.0000),
+  
+		       (26,'Huelva','sur', NULL, NULL, NULL),
+  
+		       (28,'Almeria','este', NULL, 900000.0000, 0.0000);
+
+	
+
+INSERT INTO Pedidos(numpedido, fechapedido, clie, resp, fab, producto, cant, importe)
+		
+VALUES (110035,'2007-01-02', 2107, 110,'aci','4100z', 9, 2250.0000),
+  
+		       (110036,'2008-06-14', 2117, 106,'rei','2a44i', 7, 3150.0000),
+  
+		       (112963,'2007-05-10', 2103, 105,'aci','41004', 28, 327.0000),
+  
+		       (112968,'2000-01-11', 2102, 101,'aci','41004', 34, 397.0000),
+  
+		       (112975,'2007-02-11', 2111, 103,'rei','2a44g', 6, 210.0000),
+  
+		       (112979,'1989-10-12', 2114, 108,'aci','4100z', 6, 1500.0000),
+  
+		       (112983,'2007-05-10', 2103, 105,'aci','41004', 6, 702.0000),
+  
+		       (112987,'2007-01-01', 2103, 105,'aci','4100y', 11, 2750.0000),
+  
+		       (112989,'2007-12-10', 2101, 106,'fea','114', 6, 1458.0000),
+  
+		       (112992,'2000-04-15', 2118, 108,'aci','41002', 10, 760.0000),
+  
+		       (112993,'2009-03-10', 2106, 102,'rei','2a45c', 24, 1896.0000),
+  
+		       (112997,'2009-04-04', 2124, 107,'bic','41003', 1, 652.0000),
+  
+		       (113003,'2009-02-05', 2108, 109,'imm','779c', 3, 5625.0000),
+  
+		       (113007,'2009-01-01', 2112, 108,'imm','773c', 3, 2925.0000),
+  
+		       (113012,'2010-05-05', 2111, 105,'aci','41003', 35, 3745.0000),
+  
+		       (113013,'2006-08-06', 2118, 108,'bic','41003', 1, 652.0000),
+  
+		       (113024,'2007-07-04', 2114, 108,'qsa','xk47', 20, 7100.0000),
+  
+		       (113027,'2011-02-05', 2103, 105,'aci','41002', 54, 5104.0000),
+  
+		       (113034,'2011-11-05', 2107, 110,'rei','2a45c', 8, 632.0000),
+  
+		       (113042,'2011-01-01', 2113, 101,'rei','2a44r', 5, 2250.0000),
+  
+		       (113045,'2010-07-02', 2112, 108,'rei','2a44r', 10, 4500.0000),
+  
+		       (113048,'2016-02-02', 2120, 102,'imm','779c', 2, 375.0000),
+  
+		       (113049,'2016-04-04', 2118, 108,'qsa','xk47', 2, 776.0000),
+  
+		       (113051,'2015-07-06', 2118, 108,'qsa','xk47', 4, 142.0000),
+  
+		       (113055,'2014-04-01', 2108, 101,'aci','4100x', 6, 15.0000),
+  
+		       (113057,'2015-11-01', 2111, 103,'aci','4100x', 24, 60.0000),
+  
+		       (113058,'2014-07-04', 2108, 109,'fea','112', 10, 1480.0000),
+  
+		       (113062,'2013-07-04', 2124, 107,'bic','41003', 10, 2430.0000),
+  	
+		       (113065,'2007-06-03', 2106, 102,'qsa','xk47', 6, 2130.0000),
+  
+		       (113069,'2007-08-01', 2109, 107,'imm','773c', 22, 31350.0000);
+	
+	
+
+INSERT INTO Productos(idfab, idproducto, descripcion, precio, existencias)
+
+		VALUES ('aci','41001','arandela', 58.0000, 277),
+  
+		       ('aci','41002','bisagra', 80.0000, 167),
+  
+		       ('aci','41003','bombín llave', 112.5000, 207),
+  
+		       ('aci','41004','palanca', 123.7000, 139),
+  
+		       ('aci','4100x','junta tórica', 26.7000, 37),
+  
+		       ('aci','4100y','extractor', 2888.0000, 25),
+  
+		       ('aci','4100z','monedero', 2625.0000, 28),
+  
+		       ('bic','41003','manivela', 652.0000, 3),
+  
+		       ('bic','41089','rodamiento', 225.0000, 78),
+  
+		       ('bic','41672','plato', 180.0000, 0),
+  
+		       ('fea','112','junta de culata', 148.0000, 115),
+  
+		       ('fea','114','cubo', 243.0000, 15),
+  
+		       ('imm','773c','reostato', 975.0000, 28),
+  
+		       ('imm','775c','giroscopio', 1425.0000, 5),
+  
+		       ('imm','779c','bargueño', 1875.0000, 0),
+  
+		       ('imm','887h','caja clavos', 54.0000, 223),
+  
+		       ('imm','887p','perno', 25.0000, 24),
+  
+		       ('imm','887x','manivela', 475.0000, 32),
+  
+		       ('qsa','xk47','destornillador', 355.0000, 38),
+  
+		       ('qsa','xk48','telescopio', 134.0000, 203),
+ 
+		       ('qsa','xk48a','llave inglesa', 117.0000, 37),
+  
+		       ('rei','2a44g','condensador de fluzo', 350.0000, 14),
+  
+		       ('rei','2a44i','bomba agua', 4500.0000, 12),
+  
+		       ('rei','2a44r','bomba aceite', 4500.0000, 12),
+  
+		       ('rei','2a45c','junta cartón', 79.0000, 210);
+
+	
+
+-- Re-enable foreign key checks
+	
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+	
+
+-- End of script
+
+
+21. Crear una tabla (llamarla copiaEmpleados) que contenga las filas de la tabla Empleados.
+
+	create table copiaEmpleados select * from empleados;
+
+22. Eliminar de Empleados algunos empleados(los que nos parezcan). Mostrar la información (de copiaEmpleados de los empleados eliminados de la tabla Empleados.
+
+	delete from empleados where numemp=105;
+	delete from empleados where numemp=101;
+	
+	select * from copiaEmpleados
+where 
+	numemp not in (select numemp from empleados);
+
+23. Crear la tabla ProductosACI que contenga todos los productos del fabricante ACI.
+					--------------------------------------
+	 create table ProductosACI     | Cuando se crea una copia de la tabla |
+	 select * from productos 
+      | la nueva tabla no tiene ni PK ni FK  |						   
+	 where idfab='ACI';		---------------------------------------
+
+24. Crear la tabla Clientes101 que contenga el numclie y nombre de todos los clientes cuyo responsable es el empleado 101.
+
+	create table clientes101
+
+	select numclie,nombre from clientes
+	
+where resp=101;
+	
+
+25. Añadir la la tabla Clientes101 una clave principal.
+
+	ALTER TABLE clientes101
+	
+ADD CONSTRAINT PRIMARY KEY (numclie);
+
+26. Cada empleado tiene la posibilidad de convertirse en socio de la empresa. Añadir el campo socio a la tabla Empleados, para indicar si es o no socio. Insertar la nueva columna después del nombre.
+
+	ALTER TABLE empleados 
+	
+ADD COLUMN socio BOOLEAN  
+	DEFAULT false
+	
+after nombre;
+
+27. Añadir el campo importetotal a la tabla Pedidos.
+
+	ALTER TABLE pedidos 
+
+	ADD COLUMN importeTotal DECIMAL(10,4);
+
+28. Añadir como primer campo de la tabla Empleados la columna anticipoSueldo de tipo entero y un valor por defecto de 1000 euros.
+
+	ALTER TABLE empleados 
+
+	ADD COLUMN anticipoSueldo int(6) 
+
+	DEFAULT 1000 FIRST;
+
+29. Añadir a la tabla Empleados las claves foráneas oficina y jefe.
+
+	ALTER TABLE empleados
+	
+ADD CONSTRAINT foreign key (oficina) REFERENCES OFICINAS (oficina),
+	
+	ADD CONSTRAINT foreign key (jefe) REFERENCES empleados (numemp);
+
+30. En una oficina el conjunto de valores (ciudad, región) debe ser único. Añadir esta restricción a la tabla e insertar datos para comprobar que funciona.
+
+	alter table oficinas
+	
+add constraint unique (ciudad,region);
+
+31. Modificar la tabla Empleados para que no se permitan dos empleados con el mismo nombre.
+
+	alter table empleados
+	
+add constraint noRepetidos unique (nombre);
+	
+	
+
+INSERT INTO Empleados(numemp, nombre, edad, oficina, puesto, contrato, jefe, cuota, ventas)
+		
+VALUES (150,'Antonio Viguer', 99, 12,'Representante','2006-10-20', 104, 3000, 3050),
+  
+		       (151,'Antonio Viguer', 98, 12,'Dir ventas','2007-05-19', 106, 20000, 14300);
+
+32. Añadir a la tabla de pedidos la definición de clave principal. Si existiera borrarla.
+
+	alter table pedidos
+	
+drop primary key;
+
+	
+
+alter table pedidos
+	
+add constraint primary key (numpedido);
+	
+
+33. En la tabla Clientes eliminar la columna limitecredito.
+
+	alter table clientes
+	
+drop column limitecredito;
+
+34. Eliminar de la tabla Pedidos los campos numpedido e importe.
+
+	alter table pedidos
+
+	drop column numpedido,
+	
+drop column importe;
+
+35. Dejar la tabla Clientes sin clave principal.
+
+	alter table Clientes
+	
+drop primary key;
+
+36. Eliminar la clave primaria de la tabla Empleados y crear una nueva clave primaria formada por el nombre y la fecha de nacimiento.
+
+	alter table Empleados
+	
+drop primary key;
+
+
+
+	
+	alter table Empleados
+	
+add constraint primary key (nombre,contrato);
+
+37. Borrar la claves foráneas de la tabla Empleados.
+
+	alter table oficinas
+	drop foreign key fkdir;
+
+38. Modificar el campo socio de Empleados para que tenga un valor por defecto de false.
+								 -----------------------------
+	alter table empleados                                   | Añadir un valor por defecto |
+	
+alter column socio set default false;			 -----------------------------
+								 -------------------------------------------------------------------------------
+	alter table empleados                                   | redefine el campo entero: cambia el nombre, el tipo y todas las restricciones |
+	
+change column socio socio boolean default false;	 -------------------------------------------------------------------------------
+								 -----------------------------------------------------------------------
+	alter table empleados 					| redefine el campo entero: pero no permite cambiar el nombre del campo |
+	
+modify column socio boolean default false;	         -----------------------------------------------------------------------
+
+39. En la tabla Empleados, el campo edad no es muy operativo, ya que hay que estar actualizándolo cada año. Se pide modificar el campo edad para que aparezca en su lugar la fecha de nacimiento, que tendrá un valor por defecto del 1/1/2016.
+
+	alter table empleados 
+	
+modify column edad date default '2016-01-01';
+	
+	alter table empleados 
+	
+change column edad fechaNacimiento date default '2016-01-01';
+
+40. Modificar el campo nombre de Empleados para que permita nombres de hasta 50 caracteres.
+
+	alter table empleados
+
+	modify column nombre varchar(50);
+	
+	alter table empleados
+	
+change column nombre nombre varchar(50);
+
+41. Cambia el nombre del campo existencias de la tabla Productos con el nombre stock.
+
+	alter table productos                          
+	
+change column existencias stock int(10);
+
+42. Renombrar la tabla Oficinas con el nombre Locales.
+
+	alter table oficinas
+	
+rename to Locales;
+
+43. Renombrar la tabla Empleados con el nombre Trabajadores.
+
+	alter table empleados
+	
+rename to trabajadores;
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Para la base de datos Robótica, se pide:
+
+44. Crear las tablas sin claves principal ni foráneas.
+
+	
+
+45. Eliminar las tablas creadas en el ejercicio anterior.
+
+
+
+46. Crear las tablas añadiendo las claves principales y foráneas. Atender a las características de cada campo: permitir nulos, valor único, etc.
+
+
+
+47. En la tabla Empleado añade la clave foránea dnisuper. En caso de existir, borrarla previamente.
+
+
+
+48. La mayoría de los dependientes son hijos, así que realizar los cambios oportunos para que los nuevos dependientes, tengan por defecto el valor “Hijo” como parentesco.
+
+49. Asignar manualmente un número a los nuevos proyectos genera multitud de problemas. Hemos decidido modificar la tabla para que a los nuevos proyectos se les asigne un número (distinto) de forma automática.
+
+
+
+50. Eliminar la clave primaria de la tabla Proyecto.
+
+
+
+51. Si el ejercicio anterior produce un error, eliminar la cualidad de autoincrement de la clave de Proyecto.
+
+
+
+52. Eliminar la clave primaria de la tabla Dependiente.
+
+
+
+53. Para contactar con los empleados sería interesante almacenar un teléfono. Realizar las modificaciones necesarias para que esto sea posible.
+
+
+
+Nota: Para que los informes queden ordenados, el teléfono debe ir detrás de la dirección.
+54. El campo tratamiento no se utiliza. Eliminar dicho campo de la tabla Empleado.
+
+

@@ -1,0 +1,65 @@
+a)
+SELECT autor, titulo, SUM(presupuesto)
+FROM Restauracion
+GROUP BY autor,titulo
+ORDER BY 3 DESC
+LIMIT 3;
+
+
+
+b)
+SELECT autor, titulo, sala
+FROM Cuadros
+WHERE NOT EXISTS (SELECT *
+                  FROM Restauracion
+                  WHERE Restauracion.autor = Cuadros.autor AND
+                        Restauracion.titulo = Cuadros.titulo);
+
+
+
+
+c)
+SELECT Cuadros.autor, Cuadros.titulo, Cuadros.fecha, Cuadros.sala, Empleados.nombre
+FROM (Cuadros JOIN Salas
+	  ON Cuadros.sala = Salas.nombre) JOIN Empleados
+      ON Salas.empleado = Empleados.dni;
+
+
+
+
+d)
+CREATE TABLE IF NOT EXISTS Restauracion (
+  cod INT NOT NULL AUTO_INCREMENT,
+  autor VARCHAR(30) NOT NULL,
+  titulo VARCHAR(45) NOT NULL,
+  fecha DATE NULL DEFAULT NOW(),
+  presupuesto DECIMAL(10,2) NULL,
+  CONSTRAINT PRIMARY KEY (`cod`),
+  CONSTRAINT fk_Restauracion_Cuadros FOREIGN KEY (autor, titulo)
+                                     REFERENCES Cuadros(autor, titulo)
+);
+
+
+
+e)
+DELETE 
+FROM Empleados
+WHERE dni NOT IN (SELECT empleado FROM Salas);
+
+Es normal que de un error si existen claves foráneas de estos empleados en otras trablas.
+
+f)
+ALTER TABLE Empleados
+ADD COLUMN tlf VARCHAR(9) AFTER nombre;
+
+
+
+g)
+CREATE TABLE CuadrosVelazquez
+SELECT titulo, fecha, precio, sala
+FROM Cuadros
+WHERE autor = "Velázquez";
+
+
+
+

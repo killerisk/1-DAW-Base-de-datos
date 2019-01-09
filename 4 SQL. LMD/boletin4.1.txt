@@ -1,0 +1,604 @@
+Mostrar bases de datos a las que tenemos acceso:
+	show databases;
+Manipular la siguente base de datos:
+	use <basedatos>;
+Mostrar las tablas de la base de datos escogida:
+	show tables;
+Mostrar los atributos de la tabla de la base de datos elegida:
+	describe <tabla>;
+
+- Selección de campos -
+
+1. Escribir una consulta para ver el nombre de todos los clientes.
+
+	SELECT nombre FROM clientes;
+
+2. Realizar una consulta que muestre el nombre y número asignado a cada uno de los clientes dis-
+ponibles en la base de datos.
+
+	SELECT nombre, numclie FROM clientes;
+
+3. Mostrar para todos los empleados su nombre, puesto y edad.
+
+	SELECT nombre, puesto, edad FROM empleados;
+
+4. Realizar un informe de la edad, nombre y puesto de todos los empleados.
+
+	SELECT edad, nombre, puesto FROM empleados;
+
+5. Para las oficinas mostrar su número identificador, ciudad y región.
+
+	SELECT oficina, ciudad, region FROM oficinas;
+
+- Renombrado de campos -
+
+6. Igual que el ejercicio anterior, pero en lugar de utilizar como nombre del campo ciudad utilizare-
+mos Localidad.
+
+	SELECT oficina, ciudad AS 'Localidad', region FROM oficinas;
+
+7. Mostrar todos los clientes y su límite de crédito. Como nombre de la cabecera deberá aparecer
+“Nombre del cliente” y “Crédito máximo”.
+
+	SELECT nombre AS 'Nombre del cliente', limitecredito AS 'Crédito máximo' FROM clientes;
+
+- Seleccionar todos los campos -
+
+8. Mostrar todos los datos de la tabla Clientes.
+
+	SELECT * FROM clientes;
+
+9. Mostrar todos los datos de la tabla Empleados.
+
+	SELECT * FROM empleados;
+
+10. Mostrar todos los datos de la tabla Oficinas.
+
+	SELECT * FROM oficinas;
+
+- Ordenación de consultas -
+
+11. Obtener la lista de clientes ordenados por su nombre. Visualizar todas las columnas de la tabla.
+
+	SELECT * FROM clientes ORDER BY nombre;
+
+12. Obtener las oficinas ordenadas por región y dentro de cada región por ciudad, si hay más de una
+oficina en la misma ciudad, aparecerá primero la que tenga el número de oficina mayor.
+
+	SELECT region, ciudad, oficina FROM oficinas ORDER BY region, ciudad, oficina DESC;
+
+13. Obtener los pedidos ordenados por la fecha en la que se realizaron.
+
+	SELECT fechapedido FROM pedidos ORDER BY fechapedido;
+
+- Limitación del número de resgistros -
+
+14. Listar los cuatro pedido más caros (con un importe mayor).
+
+	SELECT importe FROM pedidos ORDER BY importe DESC LIMIT 4;
+
+15. Obtener el número del cliente que hizo el primer pedido.
+
+	SELECT clie FROM pedidos ORDER BY fechapedido ASC LIMIT 1;
+
+16. Obtener el nombre del empleado de menor edad.
+
+	SELECT nombre FROM empleados ORDER BY edad ASC LIMIT 1;
+
+- Operadores aritméticos -
+
+17. Siempre he tenido la duda de saber cuanto es siete más tres.
+
+	SELECT 7+3;
+
+18. Mostrar del empleado más joven, su edad actual y la edad que tendrá el año que viene.
+
+	SELECT nombre, edad, edad+1 AS 'Año que viene' FROM empleados ORDER BY edad ASC LIMIT 1;
+
+19. Mostrar los clientes, suponiendo que aumentamos su límite de crédito en 500 euros.
+
+	SELECT nombre, limitecredito, limitecredito+500 AS 'Aumentado' FROM clientes; 
+
+20. Obtener la lista de todos los productos, indicando para cada uno: idfab, idproducto, descripción,
+precio y precio con I.V.A. incluido (es el precio anterior aumentado en un 21%).
+
+	SELECT idfab, idproducto, descripcion, precio, precio*1.21 AS 'IVA' FROM productos;
+
+21. De cada pedido queremos saber su número, la fecha en la que se realizó, cantidad pedida, el precio
+unitario de cada producto y el importe total.
+
+	SELECT numpedido, fechapedido, cant, importe/cant, importe FROM pedidos;
+
+22. Obtener el número de pedido, fab, producto, cantidad, precio unitario e importe pero mostrando
+únicamente los tres pedidos de menor precio unitario.
+
+	SELECT numpedido, fab, producto, cant, importe/cant, importe FROM pedidos ORDER BY importe/cant ASC LIMIT 3;
+
+- Funciones de fecha -
+
+23. ¿Cuál es la fecha de hoy?
+
+	SELECT CURRENT_DATE;
+
+24. Mostrar el mes actual.
+
+	SELECT MONTH(CURRENT_DATE);
+
+25. ¿Que día de la semana es hoy?
+
+	SELECT DAYOFMONTH(CURRENT_DATE);
+
+26. Si tienes 25 años, ¿en que año naciste?
+
+	SELECT YEAR(CURRENT_DATE)-25 AS 'Fecha nacimiento';
+
+27. Y si naciste en el año 2000, ¿cuantos años tienes?
+
+	SELECT YEAR(CURRENT_DATE)-2000 AS 'Edad';
+
+28. Para todos los pedidos, mostrar el número de pedido, el importe, el día de la semana y el mes en el que se realizó.
+
+	SELECT numpedido, importe, DAYOFWEEK(fechapedido), MONTH(fechapedido) FROM pedidos;
+
+29. Listas de cada empleado su nombre, nº de días que lleva trabajando en la empresa y su año de nacimiento (suponiendo que este año ya ha cumplido años).
+
+	SELECT nombre, datediff(current_date(), date(contrato)) AS 'Dias trabajados', year(current_date())-edad AS 'Año de nacimiento' FROM empleados;
+
+30. Para cada pedido mostrar sus datos y el númeo de días transcurrido desde que se realizó hasta hoy.
+
+	SELECT numpedido, producto, cant, importe, datediff(current_date(), fechapedido) AS 'Dias transcurridos' FROM pedidos;
+
+31. Obtener la fecha actual, en formato "(<nombre_día>) <día> de <nombre_mes> del año <año>".
+Un ejemplo: (Jueves) 7 de septiembre del año 2018
+
+	SELECT date_format(current_date(), "(%W) %d de %M del año %Y");
+
+32. Mostrar la información de todos los pedidos junto a la fecha en la que se realizaron, con el formato del ejercicio anterior.
+
+	SELECT numpedido, producto, cant, importe, date_format(fechapedido, "(%W) %d de %M del año %Y");
+
+33. Obtener la hora actual con el formato "Las <hora> horas y <minuto> minutos".
+Un ejemplo: Las 10 horas y 54 minutos.
+
+	SELECT date_format(now(), "Las %H horas y %i minutos");
+
+- Funciones de cadena -
+
+34. ¿Cual es la longitud de tu nombre?
+
+	SELECT char_length('Miguel');
+
+35. Mostrar junto al nombre de cada empleado el numero de caracteres que componen su nombre.
+
+	SELECT nombre, char_length(nombre) AS 'N caracteres' FROM empleados;
+
+36. Listar el nombre de los clientes anteponiendo la cadena "Don".
+
+	SELECT concat('Don ', nombre);
+
+37. Mostrar el nombre de cada cliente sustituyendo la letra e por el simbolo @;
+
+	SELECT replace(nombre, 'e', '@') FROM clientes;
+
+38. Mostrar los primeros diez caracteres a la derecha de la frase: "Mi perro se llama Perico Perez".
+
+	SELECT substring("Mi perro se llama Perico Perez", -10);
+
+39. Para cada empleado mostrar su nombre, numero de empleado y su puesto de la forma: "Trabaja de ..." añadiendo el puesto correspondiente.
+El nombre de la ultima columna debe ser "Categoria".
+
+	
+
+40. Igual que el ejercicio anterior pero cambiando el puesto de "Representante" por el de "Comercial".
+
+	
+
+41. Para cada producto obtener sus datos. Por no hacer muy largo el informe mostrar de la descripcion solo los primeros 8 caracteres.
+
+	
+
+- Condicionales -
+
+42. Mostrar los empleados cuya edad sea igual a 29 años.
+
+	SELECT * FROM empleados WHERE edad='29';
+
+43. Listar toda la informacion de los pedidos de enero.
+
+	SELECT * FROM pedidos WHERE month(fechapedido)='1';
+
+44. Listar toda la informacion de los pedidos con un mes distinto a enero.
+
+	SELECT * FROM pedidos WHERE month(fechapedido)!='1';
+
+45. Listar los numeros de los empleados que tiene una oficina asignada.
+
+	SELECT numemp FROM empleados WHERE oficina;
+
+46. Listar los numeros de los empleados que no tienen una oficina asignada y tienen mas de 30 años.
+
+	SELECT numemp 
+	FROM empleados 
+	WHERE oficina IS NULL && 
+		edad>30;
+
+47. Listar los numeros de las oficinas que no tienen director.
+
+	SELECT oficina FROM oficinas WHERE dir IS NULL;
+
+48. Listar los datos de las oficinas de las regiones del norte y del este (tienen que aparece primero las del norte y despues las del este).
+
+	SELECT * 
+	FROM oficinas 
+	WHERE region='norte' OR 
+		region='este' 
+	ORDER BY region DESC;
+
+49. Mostrar la informacion de los empleados que trabajan en las oficinas 11, 12, 23 o 24.
+
+	SELECT * 
+	FROM empleados 
+	WHERE oficina IN (11, 12, 23, 24);
+
+50. Listar los empleados cuyo nombre contengan una 'r'.
+
+	SELECT * FROM empleados WHERE nombre LIKE '%r%';
+
+51. Mostrar los empleados cuyo apellido o segundo nombre comiencen por una 'V'.
+
+	SELECT * FROM empleados WHERE nombre LIKE 'V%';
+
+52. Listar los producto cuyo idproducto acabe en 'X'.
+
+	
+
+- Consultas multitablas -
+
+53. Mostrar la informacion de los empleados junto a la informacion de las oficinas en las que trabajan.
+
+	SELECT * 
+	FROM empleados JOIN oficinas
+		ON empleados.oficina = oficinas.oficina;
+
+54. Igual que el ejercicio anterior, pero mostrando solo los empleados que trabajan en las oficinas del sur.
+
+	SELECT * 
+	FROM empleados JOIN oficinas
+		ON empleados.oficina = oficinas.oficina 
+	WHERE region='sur';
+
+55. Igual que el ejercicio anterior, ordenando los empleados por edad.
+
+	SELECT * 
+	FROM empleados JOIN oficinas
+		ON empleados.oficina = oficinas.oficina
+	WHERE region='sur'
+	ORDER BY edad;
+
+56. Escribir una consulta que muestre la informacion de todos los empleados junto a los datos de su oficina.
+
+	
+
+57. Escribir una consulta que muestre la informacion de todos los empleados (trabajen o no en una oficina) junto a la informacion de su oficina.
+
+	
+
+58. Listar las oficinas del este indicando para cada una de ellas su numero, ciudad, numeros y nombres de sus empleados. Hacer una version en la que aparecen
+solo las que tienen empleados, y hacer otra en las que ademas aparezcan las oficinas del este que no tienen empleados.
+
+	SELECT oficinas.oficina, ciudad, numemp, nombre 
+	FROM oficinas JOIN empleados 
+		ON oficinas.oficina=empleados.oficina
+	WHERE region='este';
+
+	SELECT oficinas.oficina, ciudad, numemp, nombre 
+	FROM oficinas LEFT JOIN empleados 
+		ON oficinas.oficina=empleados.oficina
+	WHERE region='este';
+
+59. Listar los pedidos mostrando su numero de pedido e importe, junto a la informacion del cliente (nombre y limite de credito) que realiza el pedido.
+
+	
+
+60. Igual que el ejercicio anterior mostrando además la información del empleado que fue responsable
+de este pedido.
+
+	
+
+61. Mostrar para cada producto la información de sus pedidos
+
+	
+
+62. Listar los datos de cada uno de los empleados, la ciudad y región en donde trabaja.
+
+	SELECT empleados.*, ciudad, region
+	FROM empleados LEFT JOIN oficinas
+		ON empleados.oficina=oficinas.oficina;
+
+63. Listar todas las oficinas con objetivo superior a 60.000 euros indicando para cada una de ellas el
+nombre de su director.
+
+	SELECT oficinas.*, empleados.nombre
+	FROM oficinas LEFT JOIN empleados
+		ON oficinas.dir=empleados.numemp
+	WHERE objetivo>60000;
+
+64. Listar los pedidos superiores a 2.500 euros, incluyendo el nombre del empleado responsable del
+pedido y el nombre del cliente que lo solicitó. Ordenar la consulta por el nombre del cliente.
+
+	SELECT *
+	FROM (pedidos JOIN clientes
+		ON pedidos.clie=clientes.numclie)
+			JOIN empleados
+		ON pedidos.resp=empleados.numemp
+	WHERE importe>2500
+	ORDER BY clientes.nombre;
+
+65. Listar ordenados por el nombre los empleados que han realizado algún pedido.
+
+	SELECT DISTINCT nombre
+	FROM empleados JOIN pedidos
+		ON empleados.numemp=pedidos.resp
+	ORDER BY empleados.nombre;
+
+66. Hallar los empleados que realizaron su primer pedido el mismo dia que fueren contratados.
+
+	SELECT DISTINCT nombre
+	FROM empleados JOIN pedidos
+		ON empleados.numemp=pedidos.resp
+	WHERE contrato=fechapedido
+	ORDER BY empleados.nombre;
+
+67. Listar los empleados con una cuota superior a la de su jefe; para cada empleado sacar sus datos y
+el número, nombre y cuota de su jefe.
+
+	SELECT EMPLEADOS.* , JEFE.numemp , JEFE.nombre, JEFE.cuota
+
+	FROM EMPLEADOS 
+
+	JOIN EMPLEADOS AS JEFE 
+		ON EMPLEADOS.jefe = JEFE.numemp
+	
+WHERE EMPLEADOS.cuota > JEFE.cuota;
+
+68. Listar los números de los empleados que son responsables de un pedido superior a 1.000 euros o
+que tengan una cuota inferior a 5.000 euros.
+
+	SELECT empleados.numemp
+	FROM empleados
+	JOIN pedidos
+		ON empleados.numemp=pedidos.resp
+	WHERE empleados.cuota<5000 | 
+		pedidos.importe>1000;
+
+69. Mostrar las oficinas que no tienen director o que se encuentran en la región sur.
+
+	SELECT *
+	FROM oficinas
+	WHERE oficinas.dir IS NULL
+	UNION
+	SELECT *
+	FROM oficinas
+	WHERE oficinas.region='sur';
+
+70. Listar las oficinas que no tienen director o en las que trabaja alguien.
+
+	SELECT oficina
+	FROM oficinas
+	WHERE oficinas.dir IS NULL
+	UNION
+	SELECT oficina
+	FROM empleados;
+
+- Consultas de agregados - 
+
+71. ¿Cuál es la cuota media y las ventas medias de todos los empleados?
+
+	SELECT avg(cuota) AS "Media cuota",
+
+	avg(ventas) AS "Media ventas"
+	
+FROM empleados;
+
+72. Edad media de los empleados.
+
+	SELECT AVG(edad) AS "Edad media"
+	FROM empleados;
+
+73. Edad del empleado más joven y del mayor.
+
+	SELECT MIN(edad) AS 'Edad minima',
+		MAX(edad) AS 'Edad maxima'
+	FROM empleados;
+
+74. Hallar el importe medio de pedidos, el importe total de pedidos y el precio medio de venta (el
+precio de venta es el precio unitario en cada pedido).
+75. Hallar el precio medio de los productos del fabricante ‘ACI’.
+76. ¿Cuál es el importe total de los pedidos realizados por el empleado Vicente Vino?
+77. Hallar en qué fecha se realizó el primer pedido.
+78. Hallar cuántos pedidos hay de más de 5.000 euros.
+79. Listar cuántos empleados están asignados a cada oficina, indicar el número de oficina.
+80. Para cada empleado, obtener su número, nombre, e importe vendido a cada cliente indicando el
+número de cliente.
+
+	
+
+81. Para cada empleado cuyos pedidos suman más de 3.000 euros, hallar su importe medio de pedidos.
+En el resultado indicar el número de empleado y su importe medio de pedidos.
+
+	SELECT resp, SUM(importe), AVG(importe)
+	
+FROM pedidos
+	
+GROUP BY resp
+
+	HAVING SUM(importe)>3000
+
+82. Listar de cada producto, su descripción, precio y cantidad total pedida, 
+incluyendo sólo los productos cuya cantidad total pedida sea superior al 75% del stock 
+y ordenado por cantidad total pedida.
+
+	
+
+83. Mostrar el número de oficinas que existen en cada región.
+
+	SELECT region, count(*)
+	
+FROM oficinas
+	
+GROUP BY region;
+
+84. Escribir una consulta SQL que indique el número de empleados que trabaja en cada oficina.
+
+	SELECT oficina, count(*)
+
+	FROM empleados
+
+	GROUP BY oficina
+
+85. Igual que el ejercicio anterior pero mostrando las oficinas donde trabajan 3 o más empleados.
+
+	SELECT oficina, COUNT(*)
+
+	FROM
+ empleados
+
+	GROUP BY oficina
+
+	HAVING count(*) >= 3
+
+86. Saber cuántas oficinas tienen algún empleado con ventas superiores a su cuota, no queremos
+saber cuales sino cuántas hay.
+
+	SELECT COUNT(DISTINCT oficina) AS 'Cuantas oficinas'
+
+	FROM empleados
+
+	WHERE ventas > cuota
+
+- Subconsultas -
+
+87. Listar los nombres de los clientes que tienen asignado como responsable a Alvaro Aluminio (suponiendo
+que no pueden haber empleados con el mismo nombre).
+
+	SELECT clientes.nombre, empleados.nombre
+	FROM clientes c JOIN empleados E
+		ON c.resp=e.numemp
+	WHERE e.nombre='Álvaro Aluminio';
+
+88. Mostrar información de los productos cuyas existencias estén por debajo de la existencia media
+de los productos.
+
+	SELECT *
+	
+FROM productos
+
+	WHERE existencias <= (SELECT AVG(existencias)
+
+				FROM
+ productos)
+
+
+89. Listar los empleados (numemp, nombre, y nº de oficina) que trabajan en oficinas “buenas” (las
+que tienen ventas superiores a su objetivo).
+
+	
+
+90.Listar los empleados que trabajan en una oficina de la región norte o de la región sur.
+
+	SELECT *
+	FROM empleados
+	WHERE oficina IN (SELECT oficina	
+				FROM oficina
+				WHERE region='norte' OR region='sur')
+	
+	// Opcional - Mediante un JOIN
+	SELECT *
+	FROM empleados e JOIN oficinas o
+		ON e.oficina=o.oficina
+	WHERE region='norte' OR region='sur'
+
+91. Listar los empleados (numemp, nombre y oficina) que no trabajan en oficinas dirigidas por el
+empleado 108.
+
+	// Mediante Subconsulta
+	SELECT numemp, nombre, empleados.oficina
+	FROM empleados
+	WHERE oficina IN (SELECT oficinas.oficina
+				FROM oficinas
+				WHERE dir!=108);
+	// Mediante JOIN
+	SELECT numemp, nombre, oficinas.oficina
+	FROM empleados JOIN oficinas ON
+			empleados.oficina=oficinas.oficina
+	WHERE oficinas.dir!=108;
+
+	// Mediante EXISTS
+	
+
+92. Escribir una consulta que muestre los empleados cuyo nombre coincide con el de algún cliente.
+Hacer dos versiones: con subconsulta de tipo lista y de tipo tabla.
+	
+	// Sub tipo lista
+	SELECT *
+	FROM empleados
+	WHERE nombre IN (SELECT clientes.nombre
+				FROM clientes);
+
+	// Sub tipo tabla
+	
+
+93. Escribir una consulta que muestre los empleados cuyo primer nombre coincide con el primer
+nombre de algún cliente.
+
+	SELECT LEFT(nombre, LOCATE(' ', nombre)-1)
+	FROM empleados
+	WHERE LEFT(nombre, LOCATE(' ', nombre)-1) IN
+				(SELECT LEFT(nombre, LOCATE(' ', nombre)-1)
+				FROM clientes);
+
+94. Mostrar los empleados que no son directores de ninguna oficina.
+
+	SELECT *
+	FROM empleados
+	WHERE nombre NOT IN (SELECT dir
+				FROM oficinas
+				WHERE dir IS NOT NULL);
+	SELECT *
+	FROM empleados
+	WHERE NOT EXISTS (SELECT *
+				FROM oficinas
+				WHERE dir = numemp);
+
+95. Listar los productos (idfab, idproducto y descripción) para los cuales no existe ningún pedido con
+importe igual o superior a 2.500 euros.
+
+	SELECT idfab, idproducto, descripcion
+	FROM productos
+	WHERE NOT EXISTS (SELECT *
+				FROM pedidos
+				WHERE fab = idfab AND producto = idproducto AND importe <= 2500);
+
+96. Listar los clientes asignados a Ana Bustamante que no han hecho un pedido superior a 300 euros.
+
+	
+
+97. Listar las oficinas en donde al menos haya un empleado cuyas ventas representen más del 55%
+del objetivo de su oficina.
+
+	SELECT *
+	FROM oficinas o
+	WHERE EXISTS (SELECT *
+			FROM empleados 
+			WHERE o.oficinas = e.oficina AND
+				e. ventas > 0.55 * o.objetivo);
+
+98. Listar las oficinas donde todos los empleados tienen ventas que superan al 50% del objetivo de la
+oficina.
+
+	
+
+99. Listar las oficinas que tengan un objetivo mayor que la suma de las cuotas de sus empleados.
+Franma.
+
+	
