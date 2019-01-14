@@ -12,3 +12,12 @@ En este caso como no especificamos una lista de columnas tenemos que poner los v
 mismo orden que las columnas en vista diseño de la tabla.
 
 2. 
+
+6. De la base de datos Robótica, insertar los dependientes como clientes de la base de datos Empresa.
+Para generar el numclie utilizaremos la suma del año, mes y día de la fecha de nacimiento de los
+dependientes. El resp será el 108 y el límite de crédito 1000 euros.
+
+INSERT INTO empresa.clientes(numclie, nombre, resp, limitecredito)
+
+SELECT YEAR(fechanac) + MONTH(fechanac) + DAY(fechanac) AS 'numclie', nombre, 108 AS 'resp', 1000 AS 'limite' 
+FROM dependientes;
