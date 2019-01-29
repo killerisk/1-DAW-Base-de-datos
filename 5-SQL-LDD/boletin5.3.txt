@@ -1,0 +1,49 @@
+1.-
+
+2.-
+CREATE OR REPLACE VIEW AsignaturasRepetidores (codigoAsig , asignatura) AS
+    SELECT 
+        a.cod, a.nombre
+    FROM
+        asignatura a
+            JOIN
+        matriculado m ON a.cod = m.cod
+    WHERE
+        m.dni IN (SELECT 
+                dni
+            FROM
+                Repetidores)
+    ORDER BY cod;
+3.-
+CREATE OR REPLACE VIEW ProfeRepetidoes AS
+    SELECT 
+        i.dni
+    FROM
+        imparte i
+            JOIN
+        AsignaturasRepetidores a ON i.cod = a.codigoAsig;
+4.-
+CREATE OR REPLACE VIEW ProfeSinAsignatura AS
+    SELECT 
+        p.nombre, p.dni
+    FROM
+        profesor p
+    WHERE
+        p.dni NOT IN (SELECT 
+                dni
+            FROM
+                imparte);
+5.-
+CREATE OR REPLACE VIEW ProfeSinAlumnos AS
+    SELECT 
+        nombre
+    FROM
+        profesor p
+            JOIN
+        imparte i ON p.dni = i.dni
+    WHERE
+        i.cod NOT IN (SELECT 
+                cod
+            FROM
+                matriculado);
+6.-
